@@ -2,6 +2,9 @@ D:\_File\EurekaRenderer\Source\EurekaRenderer.cpp;D:\_File\EurekaRenderer\x64\De
 D:\_File\EurekaRenderer\Source\glad.c;D:\_File\EurekaRenderer\x64\Debug\glad.obj
 D:\_File\EurekaRenderer\Source\Renderer\EBO.cpp;D:\_File\EurekaRenderer\x64\Debug\EBO.obj
 D:\_File\EurekaRenderer\Source\Renderer\Renderer.cpp;D:\_File\EurekaRenderer\x64\Debug\Renderer.obj
+D:\_File\EurekaRenderer\Source\Renderer\RendererShaderFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererShaderFunctions.obj
+D:\_File\EurekaRenderer\Source\Renderer\RendererTextureFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererTextureFunctions.obj
+D:\_File\EurekaRenderer\Source\Renderer\RenderPipeline.cpp;D:\_File\EurekaRenderer\x64\Debug\RenderPipeline.obj
 D:\_File\EurekaRenderer\Source\Renderer\VAO.cpp;D:\_File\EurekaRenderer\x64\Debug\VAO.obj
 D:\_File\EurekaRenderer\Source\Renderer\VBO.cpp;D:\_File\EurekaRenderer\x64\Debug\VBO.obj
 D:\_File\EurekaRenderer\Source\Shader\Shader.cpp;D:\_File\EurekaRenderer\x64\Debug\Shader.obj

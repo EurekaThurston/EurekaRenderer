@@ -2,15 +2,21 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+#include <iostream>
 
 Texture::Texture( const std::string path )
-    : m_textureID( 0 ), m_filePath( path ), m_localBuffer( nullptr ), m_width( 0 ), m_height( 0 ), m_BPP( 0 )
+    : m_textureID(new GLuint(0), [](GLuint* ptr) {glDeleteTextures(1, ptr); delete ptr;}), m_filePath( path ), m_localBuffer( nullptr ), m_width( 0 ), m_height( 0 ), m_BPP( 0 )
 {
     stbi_set_flip_vertically_on_load( 1 );
     m_localBuffer = stbi_load( path.c_str(), &m_width, &m_height, &m_BPP, 0 );
 
-    glGenTextures( 1, &m_textureID );
-    glBindTexture( GL_TEXTURE_2D, m_textureID );
+    if ( !m_localBuffer )
+    {
+        std::cout << "Failed to load texture: " << path << std::endl;
+    }
+    
+    glGenTextures( 1, m_textureID.get() );
+    glBindTexture( GL_TEXTURE_2D, *m_textureID );
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
@@ -28,13 +34,13 @@ Texture::Texture( const std::string path )
 
 Texture::~Texture()
 {
-    glDeleteTextures(1, &m_textureID);
+    glDeleteTextures(1, m_textureID.get());
 }
 
 void Texture::Bind( GLuint slot ) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glBindTexture(GL_TEXTURE_2D, *m_textureID);
 }
 
 void Texture::Unbind() const

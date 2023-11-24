@@ -5,6 +5,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
+#include "VBL.h"
 #include "../Shader/Shader.h"
 #include "../Texture/Texture.h"
 

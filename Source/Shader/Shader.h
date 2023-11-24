@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <memory>
 #include "../Texture/Texture.h"
 
 struct ShaderProgramSources
@@ -24,11 +25,30 @@ public:
 
 private:
     std::string m_FilePath;
-    unsigned int m_ShaderID;
+    // unsigned int m_ShaderID;
+    std::unique_ptr<GLuint, void(*)(GLuint*)> m_ShaderID;
     std::unordered_map<std::string, int> m_UniformLocationCache;
     
     ShaderProgramSources ParseShader( const std::string& filepath );
     unsigned int CompileShader( unsigned int type, const std::string& source );
     unsigned int CreateShader( const std::string& vertexShader, const std::string& fragmentShader );
     int GetUniformLocation( const std::string& name );
+    unsigned int CompileErrorShader( unsigned int type);
+
+    const char* m_errorVertexShaderSource = R"glsl(
+    #version 460 core
+    layout (location = 0) in vec3 aPos;
+    void main() {
+        gl_Position = vec4(aPos, 1.0);
+    }
+    )glsl";
+
+    const char* m_errorFragmentShaderSource = R"glsl(
+    #version 460 core
+    out vec4 FragColor;
+    void main() {
+        FragColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
+    }
+    )glsl";
+
 };

@@ -11,5 +11,5 @@ public:
     void Unbind() const;
 
 private:
-    GLuint m_VaoID;
+    GLuint m_vaoID;
 };

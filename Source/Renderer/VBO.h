@@ -1,5 +1,6 @@
 #pragma once
 #include "glad/glad.h"
+#include "VBL.h"
 
 class VBO
 {
@@ -10,6 +11,10 @@ public:
     void Bind() const;
     void Unbind() const;
 
+    void SetLayout(const VertexBufferLayout& layout);
+    void ActiveLayout() const;
+
 private:
-    GLuint m_VboID;
+    GLuint m_vboID;
+    VertexBufferLayout m_layout;
 };

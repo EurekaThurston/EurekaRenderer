@@ -239,6 +239,9 @@
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\Renderer\EBO.cpp" />
     <ClCompile Include="Source\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Renderer\RendererShaderFunctions.cpp" />
+    <ClCompile Include="Source\Renderer\RendererTextureFunctions.cpp" />
+    <ClCompile Include="Source\Renderer\RenderPipeline.cpp" />
     <ClCompile Include="Source\Renderer\VAO.cpp" />
     <ClCompile Include="Source\Renderer\VBO.cpp" />
     <ClCompile Include="Source\Shader\Shader.cpp" />
@@ -326,6 +329,7 @@
     <ClInclude Include="Source\Renderer\EBO.h" />
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\VAO.h" />
+    <ClInclude Include="Source\Renderer\VBL.h" />
     <ClInclude Include="Source\Renderer\VBO.h" />
     <ClInclude Include="Source\Shader\Shader.h" />
     <ClInclude Include="Source\Texture\Texture.h" />
@@ -333,8 +337,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\lib\glfw3.lib" />
+    <Content Include="Resources\Textures\Face.png" />
     <Content Include="Resources\Textures\Icon.png" />
-    <Content Include="Source\Shader\DefaultShader.glsl" />
+    <Content Include="Source\Shader\Shaders\DefaultShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

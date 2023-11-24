@@ -11,5 +11,5 @@ public:
     void Unbind() const;
 
 private:
-    GLuint m_EboID;
+    GLuint m_eboID;
 };

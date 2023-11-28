@@ -9,9 +9,9 @@
 #include <glm/glm.hpp>
 
 
-
 // Structure to store vertex data
-struct VertexAttributes {
+struct VertexAttributes
+{
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
@@ -20,22 +20,26 @@ struct VertexAttributes {
 };
 
 // Structure to represent a mesh
-struct MeshData {
+struct MeshData
+{
     std::vector<VertexAttributes> vertices;
     std::vector<unsigned int> indices;
     std::string name;
 };
 
-class Model {
+class Model
+{
 public:
-    Model(const std::string& filePath);
+    Model( const std::string& modelName, const std::string& filePath );
 
-    const std::vector<MeshData>& GetMeshData() const;
+    std::string GetModelName();
+    const std::vector<MeshData>& GetMeshData();
 
 private:
+    std::string m_modelName;
     std::vector<MeshData> m_meshData;
 
-    void LoadModel(const std::string& filePath);
-    void ProcessNode(aiNode* node, const aiScene* scene);
-    MeshData ProcessMesh(aiMesh* mesh, const aiScene* scene);
+    void LoadModel( const std::string& filePath );
+    void ProcessNode( aiNode* node, const aiScene* scene );
+    MeshData ProcessMesh( aiMesh* mesh, const aiScene* scene );
 };

@@ -11,9 +11,9 @@ out vec2 uv;
 
 void main()
 {
-    gl_Position = VP * vec4(aPos, 1.0);
+    gl_Position = TransformObjectToClip(vec4(aPos, 1.0));
     uv = aTexCoord;
-    
+
 }
 
 

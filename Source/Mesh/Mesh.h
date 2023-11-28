@@ -6,6 +6,7 @@
 #include "EBO.h"
 #include "../Camera/Camera.h"
 #include "../Model/Model.h"
+#include "../Misc/LifeSaving.h"
 
 struct RenderContext
 {
@@ -18,17 +19,31 @@ struct RenderContext
 class Mesh
 {
 public:
-    std::string m_name;
-    std::vector<VertexAttributes> m_vertices;
-    std::vector<GLuint> m_indices;
+    Mesh( const std::string name, std::vector<VertexAttributes>& vertices, std::vector<GLuint>& indices );
+
     RenderContext m_renderContext;
-    
+
     VAO m_vao;
 
-    Mesh(const std::string name, std::vector<VertexAttributes>& vertices, std::vector<GLuint>& indices);
-    std::string GetName() const { return m_name; }
+    glm::vec3 GetPosition() const;
+    void SetPosition( const glm::vec3& position );
+    glm::vec3 GetRotation() const;
+    void SetRotation( const glm::vec3& rotation );
+    glm::vec3 GetScale() const;
+    void SetScale( const glm::vec3& scale );
+    glm::mat4 GetModelMatrix() const;
+    void SetModelMatrix( const glm::mat4& modelMatrix );
 
-    void SetRenderContext(GLenum mode, Shader& shader, Camera& camera);
+    void SetRenderContext( GLenum mode, Shader& shader, Camera& camera );
     void Draw();
-    
+
+private:
+    glm::vec3 m_position;
+    glm::vec3 m_rotation;
+    glm::vec3 m_scale;
+    glm::mat4 m_modelMatrix;
+    void UpdateModelMatrix();
+
+    std::vector<VertexAttributes> m_vertices;
+    std::vector<GLuint> m_indices;
 };

@@ -35,6 +35,7 @@ public:
 
     // Mesh
     Mesh* GetMesh( const std::string& meshName );
+    void SetMeshName( const std::string& meshName, const std::string& newName );
     void CreateMesh( const std::string& meshName, std::vector<VertexAttributes>& vertices,
                      std::vector<GLuint>& indices );
     void CreateMeshFromModel( Model& model );

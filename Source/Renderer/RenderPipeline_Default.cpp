@@ -4,9 +4,15 @@
 
 void Renderer::SetupContext()
 {
+    /* -------------------------------------------------------------------------- */
+    // Import external assets
     // Texture
-    // AddTexture("Icon", "Resources/Textures/Icon.png");
-    // AddTexture("Face", "Resources/Textures/Face.png");
+    // ImportTexture("Icon", "Resources/Textures/Icon.png");
+    // ImportTexture("Face", "Resources/Textures/Face.png");
+
+    // Model    
+    ImportModel("Monkey", "Resources/Models/Monkey.fbx");
+    /* -------------------------------------------------------------------------- */
 
     // Shader
     CreateShader("DefaultShader", "Source/Shader/Shaders/DefaultShader.glsl");
@@ -18,10 +24,9 @@ void Renderer::SetupContext()
     CreateCamera("MainCamera", m_window, glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f),
                  glm::vec3(0.0f, 1.0f, 0.0), 45.0f, 0.1f, 100.0f);
 
-    // Model    
-    ImportModel("Monkey", "Resources/Models/Monkey.fbx");
     CreateMeshFromModel(*GetModel("Monkey"));
-    SetMeshRenderContext("Suzanne.001", GL_TRIANGLES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
+    SetMeshRenderContext("Suzanne.001", GL_LINES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
+    SetMeshName("Suzanne.001", "Monkey");
 
     // Setup renderer context
     SetupRendererContext();

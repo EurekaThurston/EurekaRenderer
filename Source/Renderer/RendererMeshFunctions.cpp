@@ -3,7 +3,30 @@
 
 Mesh* Renderer::GetMesh( const std::string& meshName )
 {
+    if (m_meshes.find(meshName) == m_meshes.end())
+    {
+        DividingLine();
+        std::cout << "Mesh not found: " << meshName << std::endl;
+        DividingLine();
+        return nullptr;
+    }
     return m_meshes[meshName];
+}
+
+void Renderer::SetMeshName( const std::string& meshName, const std::string& newName )
+{
+    if (m_meshes.find(meshName) == m_meshes.end())
+    {
+        DividingLine();
+        std::cout << "Mesh not found: " << meshName << std::endl;
+        DividingLine();
+        return;
+    }
+    m_meshes[newName] = m_meshes[meshName];
+    m_meshes.erase(meshName);
+    DividingLine();
+    std::cout << "Mesh name changed: " << meshName << " to " << newName << std::endl;
+    DividingLine();
 }
 
 void Renderer::CreateMesh( const std::string& meshName, std::vector<VertexAttributes>& vertices,
@@ -29,8 +52,7 @@ void Renderer::CreateMeshFromModel( Model& model )
         }
         CreateMesh(meshData.name, vertices, indices);
         DividingLine();
-        std::cout << "Mesh created: " << meshData.name << std::endl;
-        DividingLine();
+        std::cout << "Mesh created: " << meshData.name << ", from Model: " << model.GetModelName() << std::endl;
     }
 }
 
@@ -57,7 +79,7 @@ void Renderer::DrawMeshes()
             if (mesh->m_renderContext.consoleLog)
             {
                 DividingLine();
-                std::cout << "Mesh drawn: " << mesh->GetName() << std::endl;
+                std::cout << "Mesh drawn: " << meshEntry.first << std::endl;
                 std::cout << "Mode: " << mesh->m_renderContext.mode << std::endl;
                 std::cout << "Shader: " << mesh->m_renderContext.shader->GetFilePath() << std::endl;
                 std::cout << "Camera: " << mesh->m_renderContext.camera->GetName() << std::endl;

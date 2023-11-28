@@ -2,48 +2,64 @@
 #include <stdexcept>
 
 
-Model::Model(const std::string& filePath) {
+Model::Model( const std::string& modelName, const std::string& filePath )
+{
+    m_modelName = modelName;
     LoadModel(filePath);
 }
 
-const std::vector<MeshData>& Model::GetMeshData() const {
+std::string Model::GetModelName()
+{
+    return m_modelName;
+}
+
+const std::vector<MeshData>& Model::GetMeshData()
+{
     return m_meshData;
 }
 
-void Model::LoadModel(const std::string& filePath) {
+void Model::LoadModel( const std::string& filePath )
+{
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(filePath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
         throw std::runtime_error("Assimp error: " + std::string(importer.GetErrorString()));
     }
 
     ProcessNode(scene->mRootNode, scene);
 }
 
-void Model::ProcessNode(aiNode* node, const aiScene* scene) {
-    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+void Model::ProcessNode( aiNode* node, const aiScene* scene )
+{
+    for (unsigned int i = 0; i < node->mNumMeshes; i++)
+    {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         m_meshData.push_back(ProcessMesh(mesh, scene));
     }
 
-    for (unsigned int i = 0; i < node->mNumChildren; i++) {
+    for (unsigned int i = 0; i < node->mNumChildren; i++)
+    {
         ProcessNode(node->mChildren[i], scene);
     }
 }
 
-MeshData Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
+MeshData Model::ProcessMesh( aiMesh* mesh, const aiScene* scene )
+{
     std::vector<VertexAttributes> vertices;
     std::vector<unsigned int> indices;
 
     // Process vertices
-    for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+    {
         VertexAttributes vertex;
         // Position
         vertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 
         // Normals
-        if (mesh->HasNormals()) {
+        if (mesh->HasNormals())
+        {
             vertex.Normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
         }
 
@@ -54,12 +70,16 @@ MeshData Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
         }
 
         // Colors
-        if (mesh->HasVertexColors(0)) {
-            vertex.Color = glm::vec4(mesh->mColors[0][i].r, mesh->mColors[0][i].g, mesh->mColors[0][i].b, mesh->mColors[0][i].a);
+        if (mesh->HasVertexColors(0))
+        {
+            vertex.Color = glm::vec4(mesh->mColors[0][i].r, mesh->mColors[0][i].g, mesh->mColors[0][i].b,
+                                     mesh->mColors[0][i].a);
         }
 
         // Texture coordinates
-        if (mesh->mTextureCoords[0]) { // Meshes can contain more than one set of texture coordinates.
+        if (mesh->mTextureCoords[0])
+        {
+            // Meshes can contain more than one set of texture coordinates.
             vertex.TexCoords = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
         }
 
@@ -67,14 +87,16 @@ MeshData Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
     }
 
     // Process indices
-    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+    {
         aiFace face = mesh->mFaces[i];
-        for (unsigned int j = 0; j < face.mNumIndices; j++) {
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+        {
             indices.push_back(face.mIndices[j]);
         }
     }
 
     std::string meshName = mesh->mName.C_Str();
 
-    return MeshData{vertices, indices, meshName};
+    return MeshData{ vertices, indices, meshName };
 }

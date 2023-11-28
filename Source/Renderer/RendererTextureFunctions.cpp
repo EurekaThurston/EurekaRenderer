@@ -1,7 +1,5 @@
 #include "Renderer.h"
 
-/* --------------------------------------------------------------- */
-// Textures
 Texture* Renderer::GetTexture( const std::string& textureName )
 {
     return m_textures[textureName];

@@ -1,25 +1,28 @@
 #include <iostream>
 #include "Renderer.h"
 
-#include <stb/stb_image.h>
-
-Renderer::Renderer()
+Renderer::Renderer(Window *window)
+    : m_window(window)
 {
-    m_vao = nullptr;
-    m_vbo = nullptr;
-    m_ebo = nullptr;
+    // Setup context
+    SetupContext();
 }
 
 Renderer::~Renderer()
 {
-    delete m_vao;
-    delete m_vbo;
-    delete m_ebo;
     for (auto& pair : m_shaders)
     {
         delete pair.second;
     }
     for (auto& pair : m_textures)
+    {
+        delete pair.second;
+    }
+    for (auto& pair : m_cameras)
+    {
+        delete pair.second;
+    }
+    for (auto& pair : m_meshes)
     {
         delete pair.second;
     }
@@ -31,6 +34,30 @@ void Renderer::Clear( GLfloat r, GLfloat g, GLfloat b, GLfloat a ) const
 {
     glClearColor(r, g, b, a);
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Renderer::Draw( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices ) const
+{
+    glDrawElements(mode, count, type, indices);
+}
+
+void Renderer::SetupRendererContext() const
+{
+    // For delta time
+    RendererContext::GetInstance().lastFrameTime = glfwGetTime();
+}
+
+
+void Renderer::UpdateRendererContext() const
+{
+    // Upate delta time
+    RendererContext::GetInstance().currentFrameTime = glfwGetTime();
+    RendererContext::GetInstance().deltaTime = static_cast<float>(RendererContext::GetInstance().currentFrameTime - RendererContext::GetInstance().lastFrameTime);
+    RendererContext::GetInstance().lastFrameTime = RendererContext::GetInstance().currentFrameTime;
+
+    // Get frame rate
+    RendererContext::GetInstance().fps = static_cast<unsigned int>(1.0f / RendererContext::GetInstance().deltaTime);
+    // std::cout << "FPS: " << RendererContext::GetInstance().fps << std::endl;
 }
 
 

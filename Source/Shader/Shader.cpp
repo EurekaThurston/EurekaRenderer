@@ -9,7 +9,11 @@ Shader::Shader( const std::string& filepath )
     : m_ShaderID(new GLuint(0), [](GLuint* ptr) { glDeleteProgram(*ptr); delete ptr; })
 {
     ShaderProgramSources source = ParseShader(filepath);
+    // For debugging
+    // std::cout << "Vertex Shader: " << source.VertexSource << std::endl;
+    // std::cout << "Fragment Shader: " << source.FragmentSource << std::endl;
     *m_ShaderID = CreateShader(source.VertexSource, source.FragmentSource);
+    m_FilePath = filepath;
 }
 
 Shader::~Shader()
@@ -19,6 +23,7 @@ Shader::~Shader()
 
 ShaderProgramSources Shader::ParseShader( const std::string& filepath )
 {
+    // if file path points to a invalid file, return error shader
     std::ifstream stream(filepath);
     if (!stream) {
         std::cout << "Failed to open shader file: " + filepath << std::endl;
@@ -35,9 +40,18 @@ ShaderProgramSources Shader::ParseShader( const std::string& filepath )
     std::string line;
     std::stringstream ss[2];
     ShaderType type = ShaderType::NONE;
+    bool versionTagPassed[2] = {false, false};  // Check if version tag is passed for include files so include files can be parsed correctly
+    bool hasIncludeFile = false;
+    std::string includeFilePath;
+
     while (getline(stream, line))
     {
-        if (line.find("// Shader") != std::string::npos)
+        if (line.find("#include") != std::string::npos)
+        {
+            includeFilePath = ExtractIncludePath(line);
+            hasIncludeFile = true;
+        } 
+        else if (line.find("// Shader") != std::string::npos)
         {
             if (line.find("Vertex") != std::string::npos)
                 type = ShaderType::VERTEX;
@@ -46,10 +60,52 @@ ShaderProgramSources Shader::ParseShader( const std::string& filepath )
         }
         else if (type != ShaderType::NONE)
         {
-            ss[(int)type] << line << "\n";
+            if (!versionTagPassed[(int)type] && line.find("#version") != std::string::npos)
+            {
+                ss[(int)type] << line << "\n";
+                if (hasIncludeFile)
+                {
+                    std::string includeContent = ReadIncludeFile(includeFilePath);
+                    ss[(int)type] << includeContent << "\n";
+                }
+            } else
+            {
+                ss[(int)type] << line << "\n";
+            }
         }
     }
     return { ss[0].str(), ss[1].str() };
+}
+
+std::string Shader::ReadIncludeFile( const std::string& filepath )
+{
+    std::ifstream stream(filepath);
+    if (!stream) {
+        std::cerr << "Failed to open include file: " << filepath << std::endl;
+        return ""; // Return an empty string in case of failure
+    }
+
+    std::stringstream buffer;
+    buffer << stream.rdbuf(); // Read the entire file into a string stream
+    
+    return buffer.str(); // Convert the string stream into a string and return it
+}
+
+std::string Shader::ExtractIncludePath( const std::string& line )
+{
+    std::string marker = "#include ";
+    size_t startPos = line.find(marker);
+    if (startPos != std::string::npos) {
+        startPos += marker.length();
+        // Expecting the path to be enclosed in quotes
+        size_t firstQuotePos = line.find("\"", startPos);
+        size_t lastQuotePos = line.find("\"", firstQuotePos + 1);
+        if (firstQuotePos != std::string::npos && lastQuotePos != std::string::npos) {
+            return line.substr(firstQuotePos + 1, lastQuotePos - firstQuotePos - 1);
+        }
+    }
+    std::cerr << "Error: Incorrect format for '#include' in line: " << line << std::endl;
+    return "";
 }
 
 unsigned int Shader::CompileShader( unsigned int type, const std::string& source )
@@ -67,7 +123,7 @@ unsigned int Shader::CompileShader( unsigned int type, const std::string& source
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
         char* message = (char*)alloca(length * sizeof(char));
         glGetShaderInfoLog(id, length, &length, message);
-        std::cout << "File to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" <<
+        std::cout << "Fail to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" <<
             std::endl;
         std::cout << message << std::endl;
         glDeleteShader(id);
@@ -140,6 +196,11 @@ void Shader::Use() const
 void Shader::SetFloat4( const std::string& name, float v0, float v1, float v2, float v3 )
 {
     glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
+}
+
+void Shader::SetFloat4x4( const std::string& name, GLboolean transpose, const GLfloat* value )
+{
+    glUniformMatrix4fv(GetUniformLocation(name), 1, transpose, value);
 }
 
 void Shader::SetSampler2D( const std::string& name, GLint textureSlot)

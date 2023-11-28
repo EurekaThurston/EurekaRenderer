@@ -1,7 +1,5 @@
 #include "Renderer.h"
 
-/* --------------------------------------------------------------- */
-// Shaders
 Shader* Renderer::GetShader( const std::string& shaderName )
 {
     return m_shaders[shaderName];

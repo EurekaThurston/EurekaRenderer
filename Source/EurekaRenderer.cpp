@@ -7,8 +7,7 @@ int main()
 {
     {
         Window window(1920, 1080, "Eureka Renderer", NULL, NULL);
-        Renderer renderer;
-        renderer.SetupContext();
+        Renderer renderer(&window);
         
         // Render loop
         while (!window.WindowShouldClose())
@@ -16,9 +15,7 @@ int main()
             // Input & event processor  
             window.ProcessInput();
             window.EventProcessor();
-
-            // Rendering commands here
-            renderer.Render(window.GetWindow());
+            renderer.Render();
             
         }
     }   // Window destructor called here

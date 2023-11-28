@@ -1,16 +1,18 @@
 #include "Renderer.h"
 #include "../Misc/LifeSaving.h"
 
-Mesh* Renderer::GetMesh(const std::string& meshName)
+Mesh* Renderer::GetMesh( const std::string& meshName )
 {
     return m_meshes[meshName];
 }
-void Renderer::AddMesh(const std::string& meshName, std::vector<VertexAttributes>& vertices, std::vector<GLuint>& indices)
+
+void Renderer::CreateMesh( const std::string& meshName, std::vector<VertexAttributes>& vertices,
+                           std::vector<GLuint>& indices )
 {
     m_meshes[meshName] = new Mesh(meshName, vertices, indices);
 }
 
-void Renderer::CreateMeshFromModel(Model& model)
+void Renderer::CreateMeshFromModel( Model& model )
 {
     const std::vector<MeshData>& meshDataArray = model.GetMeshData();
     for (const auto& meshData : meshDataArray)
@@ -25,17 +27,18 @@ void Renderer::CreateMeshFromModel(Model& model)
         {
             indices.push_back(index);
         }
-        AddMesh(meshData.name, vertices, indices);
+        CreateMesh(meshData.name, vertices, indices);
         DividingLine();
         std::cout << "Mesh created: " << meshData.name << std::endl;
         DividingLine();
     }
 }
 
-void Renderer::SetMeshRenderContext(const std::string& meshName, GLenum mode, Shader& shader, Camera& camera)
+void Renderer::SetMeshRenderContext( const std::string& meshName, GLenum mode, Shader& shader, Camera& camera )
 {
     m_meshes[meshName]->SetRenderContext(mode, shader, camera);
     DividingLine();
+    // TIANGLE = 4
     std::cout << "Mesh render context set: " << meshName << std::endl;
     std::cout << "Mode: " << mode << std::endl;
     std::cout << "Shader: " << shader.GetFilePath() << std::endl;

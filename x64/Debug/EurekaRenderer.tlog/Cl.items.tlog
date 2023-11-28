@@ -9,7 +9,6 @@ D:\_File\EurekaRenderer\Source\Mesh\VBO.cpp;D:\_File\EurekaRenderer\x64\Debug\VB
 D:\_File\EurekaRenderer\Source\Model\Model.cpp;D:\_File\EurekaRenderer\x64\Debug\Model.obj
 D:\_File\EurekaRenderer\Source\Renderer\Renderer.cpp;D:\_File\EurekaRenderer\x64\Debug\Renderer.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererCameraFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererCameraFunctions.obj
-D:\_File\EurekaRenderer\Source\Renderer\RendererContext.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererContext.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererMeshFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererMeshFunctions.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererModelFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererModelFunctions.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererShaderFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererShaderFunctions.obj

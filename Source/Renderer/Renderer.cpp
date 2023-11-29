@@ -1,9 +1,10 @@
 #include <iostream>
 #include "Renderer.h"
 
-Renderer::Renderer(Window *window)
-    : m_window(window)
+Renderer::Renderer( Window* window )
 {
+    m_window    = window;
+    m_DepthTest = true;
     // Setup context
     SetupContext();
 }
@@ -28,12 +29,33 @@ Renderer::~Renderer()
     }
 }
 
+void Renderer::EnableDepthTest( bool enable ) const
+{
+    if (enable)
+    {
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glfwWindowHint(GLFW_DEPTH_BITS, 24);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+}
+
 /* --------------------------------------------------------------- */
 // Render Commands
 void Renderer::Clear( GLfloat r, GLfloat g, GLfloat b, GLfloat a ) const
 {
     glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    if (m_DepthTest)
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+    else
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
 }
 
 void Renderer::Draw( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices ) const
@@ -52,12 +74,13 @@ void Renderer::UpdateRendererContext() const
 {
     // Upate delta time
     RendererContext::GetInstance().currentFrameTime = glfwGetTime();
-    RendererContext::GetInstance().deltaTime = static_cast<float>(RendererContext::GetInstance().currentFrameTime - RendererContext::GetInstance().lastFrameTime);
+    RendererContext::GetInstance().deltaTime = static_cast<float>(RendererContext::GetInstance().currentFrameTime -
+        RendererContext::GetInstance().lastFrameTime);
     RendererContext::GetInstance().lastFrameTime = RendererContext::GetInstance().currentFrameTime;
 
     // Get frame rate
     RendererContext::GetInstance().fps = static_cast<unsigned int>(1.0f / RendererContext::GetInstance().deltaTime);
-    // std::cout << "FPS: " << RendererContext::GetInstance().fps << std::endl;
+    std::cout << "FPS:" << RendererContext::GetInstance().fps << std::endl;
 }
 
 

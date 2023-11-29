@@ -19,7 +19,7 @@ Camera::Camera( const std::string name, Window* window, glm::vec3 position, glm:
     m_farPlane          = farPlane;
 }
 
-void Camera::UpdateMatrix( Shader& shader, const char* uniform )
+void Camera::UpdateMatrix( Shader& shader )
 {
     // Makes camera look in the right direction from the right position
     glm::mat4 view = glm::lookAt(m_position, m_position + m_orientation, m_up);
@@ -29,7 +29,8 @@ void Camera::UpdateMatrix( Shader& shader, const char* uniform )
                                                 ->GetWindowHeight()), m_nearPlane, m_farPlane);
 
     // Exports the camera matrix to the Vertex Shader
-    shader.SetFloat4x4(uniform, GL_FALSE, glm::value_ptr(projection * view));
+    shader.SetFloat4x4("V", GL_FALSE, glm::value_ptr(view));
+    shader.SetFloat4x4("P", GL_FALSE, glm::value_ptr(projection));
 }
 
 void Camera::UpdateInput()

@@ -25,15 +25,19 @@ void Renderer::SetupContext()
                  glm::vec3(0.0f, 1.0f, 0.0), 45.0f, 0.1f, 100.0f);
 
     CreateMeshFromModel(*GetModel("Monkey"));
-    SetMeshRenderContext("Suzanne.002", GL_LINES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
-    SetMeshRenderContext("Suzanne.003", GL_LINES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
+    SetMeshRenderContext("Suzanne", GL_TRIANGLES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
+    SetMeshRenderContext("Suzanne.001", GL_TRIANGLES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
 
-    GetMesh("Suzanne.002")->SetScale(glm::vec3(0.01f));
-    GetMesh("Suzanne.003")->SetScale(glm::vec3(0.01f));
+    GetMesh("Suzanne")->SetScale(glm::vec3(0.01f));
+    GetMesh("Suzanne.001")->SetScale(glm::vec3(0.01f));
 
+    // Light
+    CreateDirectionalLight("Sun", glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 1.0f), 0.5f);
+    GetDirectionalLight("Sun")->SetShaderDirectionalLight(*GetShader("DefaultShader"));
 
     // Setup renderer context
     SetupRendererContext();
+    EnableDepthTest(true);
 }
 
 void Renderer::Render()
@@ -44,9 +48,12 @@ void Renderer::Render()
     // Update renderer context
     UpdateRendererContext();
 
+    // Update directional light
+    GetDirectionalLight("Sun")->SetShaderDirectionalLight(*GetShader("DefaultShader"));
+
     // Camera receives input
     GetCamera("MainCamera")->UpdateInput();
-    GetCamera("MainCamera")->UpdateMatrix(*GetShader("DefaultShader"), "VP");
+    GetCamera("MainCamera")->UpdateMatrix(*GetShader("DefaultShader"));
 
     // Draw call
     DrawMeshes();

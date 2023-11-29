@@ -2,6 +2,8 @@ D:\_File\EurekaRenderer\Libraries\include\glm\detail\glm.cpp;D:\_File\EurekaRend
 D:\_File\EurekaRenderer\Source\Camera\Camera.cpp;D:\_File\EurekaRenderer\x64\Debug\Camera.obj
 D:\_File\EurekaRenderer\Source\EurekaRenderer.cpp;D:\_File\EurekaRenderer\x64\Debug\EurekaRenderer.obj
 D:\_File\EurekaRenderer\Source\glad.c;D:\_File\EurekaRenderer\x64\Debug\glad.obj
+D:\_File\EurekaRenderer\Source\Light\DirectionalLight.cpp;D:\_File\EurekaRenderer\x64\Debug\DirectionalLight.obj
+D:\_File\EurekaRenderer\Source\Light\Light.cpp;D:\_File\EurekaRenderer\x64\Debug\Light.obj
 D:\_File\EurekaRenderer\Source\Mesh\EBO.cpp;D:\_File\EurekaRenderer\x64\Debug\EBO.obj
 D:\_File\EurekaRenderer\Source\Mesh\Mesh.cpp;D:\_File\EurekaRenderer\x64\Debug\Mesh.obj
 D:\_File\EurekaRenderer\Source\Mesh\VAO.cpp;D:\_File\EurekaRenderer\x64\Debug\VAO.obj
@@ -9,6 +11,7 @@ D:\_File\EurekaRenderer\Source\Mesh\VBO.cpp;D:\_File\EurekaRenderer\x64\Debug\VB
 D:\_File\EurekaRenderer\Source\Model\Model.cpp;D:\_File\EurekaRenderer\x64\Debug\Model.obj
 D:\_File\EurekaRenderer\Source\Renderer\Renderer.cpp;D:\_File\EurekaRenderer\x64\Debug\Renderer.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererCameraFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererCameraFunctions.obj
+D:\_File\EurekaRenderer\Source\Renderer\RendererLightFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererLightFunctions.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererMeshFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererMeshFunctions.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererModelFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererModelFunctions.obj
 D:\_File\EurekaRenderer\Source\Renderer\RendererShaderFunctions.cpp;D:\_File\EurekaRenderer\x64\Debug\RendererShaderFunctions.obj

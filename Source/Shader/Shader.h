@@ -12,7 +12,6 @@ struct ShaderProgramSources
 
 class Shader
 {
-
 public:
     Shader( const std::string& filepath );
     ~Shader();
@@ -22,23 +21,26 @@ public:
     std::string GetFilePath() const { return m_FilePath; }
 
     // Uniforms
+    void SetFloat( const std::string& name, float value );
+    void SetFloat2( const std::string& name, float v0, float v1 );
+    void SetFloat3( const std::string& name, float v0, float v1, float v2 );
     void SetFloat4( const std::string& name, float v0, float v1, float v2, float v3 );
-    void SetFloat4x4( const std::string& name,  GLboolean transpose, const GLfloat* value );
-    void SetSampler2D (const std::string& name, GLint textureSlot);
+    void SetFloat4x4( const std::string& name, GLboolean transpose, const GLfloat* value );
+    void SetSampler2D( const std::string& name, GLint textureSlot );
 
 private:
     std::string m_FilePath;
     // unsigned int m_ShaderID;
-    std::unique_ptr<GLuint, void(*)(GLuint*)> m_ShaderID;
+    std::unique_ptr<GLuint, void(*)( GLuint* )> m_ShaderID;
     std::unordered_map<std::string, int> m_UniformLocationCache;
-    
+
     ShaderProgramSources ParseShader( const std::string& filepath );
-    std::string ReadIncludeFile(const std::string& filepath);
-    std::string ExtractIncludePath(const std::string& line);
+    std::string ReadIncludeFile( const std::string& filepath );
+    std::string ExtractIncludePath( const std::string& line );
     unsigned int CompileShader( unsigned int type, const std::string& source );
     unsigned int CreateShader( const std::string& vertexShader, const std::string& fragmentShader );
     int GetUniformLocation( const std::string& name );
-    unsigned int CompileErrorShader( unsigned int type);
+    unsigned int CompileErrorShader( unsigned int type );
 
     // Error shader
     const char* m_errorVertexShaderSource = R"glsl(
@@ -56,5 +58,4 @@ private:
         FragColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
     }
     )glsl";
-
 };

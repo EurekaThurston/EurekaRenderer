@@ -110,7 +110,7 @@
             <WarningLevel>Level3</WarningLevel>
             <Optimization>Disabled</Optimization>
             <SDLCheck>true</SDLCheck>
-            <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;TINYGLTF_NOEXCEPTION;JSON_NOEXCEPTION;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+            <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <ConformanceMode>true</ConformanceMode>
             <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
             <LanguageStandard>stdcpp20</LanguageStandard>
@@ -163,7 +163,7 @@
             <OptimizeReferences>true</OptimizeReferences>
             <GenerateDebugInformation>true</GenerateDebugInformation>
             <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glfw3.lib;opengl32.lib;assimp-vc143-mtd.lib;</AdditionalDependencies>
-            <AdditionalLibraryDirectories>assimp-vc143-mtd.lib;</AdditionalLibraryDirectories>
+            <AdditionalLibraryDirectories>assimp-vc143-mtd.lib</AdditionalLibraryDirectories>
         </Link>
     </ItemDefinitionGroup>
     <ItemGroup>
@@ -244,6 +244,8 @@
             <LinkCompiled>true</LinkCompiled>
         </ClCompile>
         <ClCompile Include="Source\glad.c"/>
+        <ClCompile Include="Source\Light\DirectionalLight.cpp"/>
+        <ClCompile Include="Source\Light\Light.cpp"/>
         <ClCompile Include="Source\Mesh\EBO.cpp">
             <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
             <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -470,6 +472,7 @@
         <ClCompile Include="Source\Model\Model.cpp"/>
         <ClCompile Include="Source\Renderer\Renderer.cpp"/>
         <ClCompile Include="Source\Renderer\RendererCameraFunctions.cpp"/>
+        <ClCompile Include="Source\Renderer\RendererLightFunctions.cpp"/>
         <ClCompile Include="Source\Renderer\RendererMeshFunctions.cpp"/>
         <ClCompile Include="Source\Renderer\RendererModelFunctions.cpp"/>
         <ClCompile Include="Source\Renderer\RendererShaderFunctions.cpp"/>
@@ -1028,6 +1031,9 @@
         <ClInclude Include="Libraries\include\KHR\khrplatform.h"/>
         <ClInclude Include="Libraries\include\stb\stb_image.h"/>
         <ClInclude Include="Source\Camera\Camera.h"/>
+        <ClInclude Include="Source\Light\DirectionalLight.h"/>
+        <ClInclude Include="Source\Light\Light.h"/>
+        <ClInclude Include="Source\Light\LightComponents.h"/>
         <ClInclude Include="Source\Mesh\EBO.h"/>
         <ClInclude Include="Source\Mesh\Mesh.h"/>
         <ClInclude Include="Source\Mesh\VAO.h"/>

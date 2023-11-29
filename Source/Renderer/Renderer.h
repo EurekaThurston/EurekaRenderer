@@ -13,6 +13,7 @@
 #include "../Camera/Camera.h"
 #include "../Mesh/Mesh.h"
 #include "../Model/Model.h"
+#include "..\Light\LightComponents.h"
 
 class Renderer
 {
@@ -23,6 +24,9 @@ public:
     // Renderer
     void SetupContext();
     void Render();
+
+    // Context
+    void EnableDepthTest( bool enable = true ) const;
 
     // Camera
     Camera* GetCamera( const std::string& cameraName );
@@ -49,6 +53,10 @@ public:
     Texture* GetTexture( const std::string& textureName );
     void ImportTexture( const std::string& textureName, const std::string& filePath );
 
+    // Light
+    DirectionalLight* GetDirectionalLight( const std::string& lightName ) const;
+    void CreateDirectionalLight( const std::string& lightName, glm::vec3 position, glm::vec3 color, float intensity );
+
     // Misc
     void GetMaxVertexAttributesSupported() const;
 
@@ -71,10 +79,18 @@ private:
     // Textures
     std::unordered_map<std::string, Texture*> m_textures;
 
-    // Render pipeline commands
+    // Directional Light
+    DirectionalLight* m_directionalLight;
+
+    // Render Context
+    bool m_DepthTest;
+
+    // Context
+    void SetupRendererContext() const;
+    void UpdateRendererContext() const;
+
+    // Render commands
     void Clear( GLfloat r = 0.5f, GLfloat g = 0.5f, GLfloat b = 0.5f, GLfloat a = 0.5f ) const;
     void Draw( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices ) const;
     void DrawMeshes();
-    void SetupRendererContext() const;
-    void UpdateRendererContext() const;
 };

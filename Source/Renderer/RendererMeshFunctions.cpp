@@ -60,7 +60,6 @@ void Renderer::SetMeshRenderContext( const std::string& meshName, GLenum mode, S
 {
     m_meshes[meshName]->SetRenderContext(mode, shader, camera);
     DividingLine();
-    // TIANGLE = 4
     std::cout << "Mesh render context set: " << meshName << std::endl;
     std::cout << "Mode: " << mode << std::endl;
     std::cout << "Shader: " << shader.GetFilePath() << std::endl;

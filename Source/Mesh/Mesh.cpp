@@ -3,7 +3,6 @@
 Mesh::Mesh( const std::string name, std::vector<VertexAttributes>& vertices, std::vector<GLuint>& indices )
 {
     m_position = glm::vec3(0.0f);
-    std::cout << m_position.x << m_position.y << m_position.z << std::endl;
     m_rotation = glm::vec3(0.0f);
     m_scale    = glm::vec3(1.0f);
 

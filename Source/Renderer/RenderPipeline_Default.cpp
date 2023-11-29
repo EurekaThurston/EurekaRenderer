@@ -11,7 +11,7 @@ void Renderer::SetupContext()
     // ImportTexture("Face", "Resources/Textures/Face.png");
 
     // Model    
-    ImportModel("Monkey", "Resources/Models/Monkey.fbx");
+    ImportModel("Monkey", "Resources/Models/TwoMonkeys.fbx");
     /* -------------------------------------------------------------------------- */
 
     // Shader
@@ -25,8 +25,12 @@ void Renderer::SetupContext()
                  glm::vec3(0.0f, 1.0f, 0.0), 45.0f, 0.1f, 100.0f);
 
     CreateMeshFromModel(*GetModel("Monkey"));
-    SetMeshRenderContext("Suzanne.001", GL_LINES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
-    SetMeshName("Suzanne.001", "Monkey");
+    SetMeshRenderContext("Suzanne.002", GL_LINES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
+    SetMeshRenderContext("Suzanne.003", GL_LINES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
+
+    GetMesh("Suzanne.002")->SetScale(glm::vec3(0.01f));
+    GetMesh("Suzanne.003")->SetScale(glm::vec3(0.01f));
+
 
     // Setup renderer context
     SetupRendererContext();
@@ -35,13 +39,14 @@ void Renderer::SetupContext()
 void Renderer::Render()
 {
     // Clear the screen
-    Clear();
+    Clear(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Update renderer context
     UpdateRendererContext();
 
     // Camera receives input
     GetCamera("MainCamera")->UpdateInput();
+    GetCamera("MainCamera")->UpdateMatrix(*GetShader("DefaultShader"), "VP");
 
     // Draw call
     DrawMeshes();

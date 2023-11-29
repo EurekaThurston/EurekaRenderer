@@ -1,11 +1,13 @@
 #pragma once
 #include <glad/glad.h>
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
+
 
 class Window
 {
 public:
-    Window (int windowWidth, int windowHeight, const char* windowTitle, GLFWmonitor* windowMonitor, GLFWwindow* windowShare);
+    Window( int windowWidth, int windowHeight, const char* windowTitle, GLFWmonitor* windowMonitor,
+            GLFWwindow* windowShare );
     ~Window();
 
     // Window setting getters
@@ -19,7 +21,7 @@ public:
     bool WindowShouldClose() const;
 
     // Window resize callback to adjust viewport size
-    static void FrameBufferSizeCallBack(GLFWwindow* window, int width, int height);
+    static void FrameBufferSizeCallBack( GLFWwindow* window, int width, int height );
 
     // Input processor
     void ProcessInput() const;
@@ -34,7 +36,7 @@ private:
     GLFWwindow* m_share;
 
     void InitializeGLFW();
-    void CreateWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share);
+    void CreateWindow( int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share );
     void InitializeGLAD();
     void SetupCallbacks();
 };

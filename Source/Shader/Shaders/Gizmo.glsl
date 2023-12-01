@@ -28,6 +28,7 @@ in VertexOutput
 
 void main()
 {
+
     FragColor = vec4(i.vertexColor, 1.0);
 }
 

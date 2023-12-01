@@ -32,6 +32,7 @@ void Camera::UpdateMatrix( Shader& shader ) const
     shader.SetFloat4x4("Matrix_V", GL_FALSE, glm::value_ptr(view));
     shader.SetFloat4x4("Matrix_P", GL_FALSE, glm::value_ptr(projection));
     shader.SetFloat4("camera.Position", m_position.x, m_position.y, m_position.z, 1.0f);
+    shader.SetFloat4("camera.Forward", m_orientation.x, m_orientation.y, m_orientation.z, 0.0f);
     shader.SetFloat("camera.FrameSizeX", static_cast<float>(m_window->GetWindowWidth()));
     shader.SetFloat("camera.FrameSizeY", static_cast<float>(m_window->GetWindowHeight()));
 }
@@ -58,6 +59,7 @@ void Camera::UpdateUIMatrix( Shader& shader ) const
     shader.SetFloat4x4("Matrix_V", GL_FALSE, glm::value_ptr(uiTransform));
     shader.SetFloat4x4("Matrix_P", GL_FALSE, glm::value_ptr(projection));
     shader.SetFloat4("camera.Position", m_position.x, m_position.y, m_position.z, 1.0f);
+    shader.SetFloat4("camera.Forward", m_orientation.x, m_orientation.y, m_orientation.z, 0.0f);
     shader.SetFloat("camera.FrameSizeX", static_cast<float>(m_window->GetWindowWidth()));
     shader.SetFloat("camera.FrameSizeY", static_cast<float>(m_window->GetWindowHeight()));
 }

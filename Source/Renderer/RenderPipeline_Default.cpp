@@ -74,7 +74,7 @@ void Renderer::Render()
     DrawMeshes();
 
     // UI
-    EnableDepthTest(false);
+    // EnableDepthTest(false);
     DrawUIs();
 
     // Swap the buffers

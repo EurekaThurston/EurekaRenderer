@@ -10,6 +10,7 @@ struct DirectionalLight
 struct Camera
 {
     vec4 Position;
+    vec4 Forward;
     float FrameSizeX;
     float FrameSizeY;
 };
@@ -96,4 +97,9 @@ vec3 DirectionalLightDirection()
 vec3 CameraDirection(vec3 vertex)
 {
     return normalize(camera.Position.xyz - vertex);
+}
+
+vec3 CameraForward()
+{
+    return normalize(camera.Forward.xyz);
 }

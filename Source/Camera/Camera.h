@@ -51,7 +51,8 @@ public:
     std::string GetName() { return m_name; }
 
     // Updates and exports the camera matrix to the Vertex Shader
-    void UpdateMatrix( Shader& shader );
+    void UpdateMatrix( Shader& shader ) const;
+    void UpdateUIMatrix( Shader& shader ) const;
     // Handles camera inputs
     void UpdateInput();
     void Movement();

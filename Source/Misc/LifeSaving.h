@@ -8,3 +8,8 @@ inline void DividingLine()
     std::cout << line << std::endl;
 }
 
+inline void DividingStar()
+{
+    std::string line(80, '*');
+    std::cout << line << std::endl;
+}

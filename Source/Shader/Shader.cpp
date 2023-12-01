@@ -6,7 +6,7 @@
 #include "Shader.h"
 
 Shader::Shader( const std::string& filepath )
-    : m_ShaderID(new GLuint(0), []( GLuint* ptr )
+    : m_shaderID(new GLuint(0), []( GLuint* ptr )
     {
         glDeleteProgram(*ptr);
         delete ptr;
@@ -16,13 +16,13 @@ Shader::Shader( const std::string& filepath )
     // For debugging
     // std::cout << "Vertex Shader: " << source.VertexSource << std::endl;
     // std::cout << "Fragment Shader: " << source.FragmentSource << std::endl;
-    *m_ShaderID = CreateShader(source.VertexSource, source.FragmentSource);
-    m_FilePath  = filepath;
+    *m_shaderID = CreateShader(source.VertexSource, source.FragmentSource);
+    m_filePath  = filepath;
 }
 
 Shader::~Shader()
 {
-    glDeleteProgram(*m_ShaderID);
+    glDeleteProgram(*m_shaderID);
 }
 
 ShaderProgramSources Shader::ParseShader( const std::string& filepath )
@@ -118,6 +118,35 @@ std::string Shader::ExtractIncludePath( const std::string& line )
     return "";
 }
 
+unsigned int Shader::CreateShader( const std::string& vertexShader, const std::string& fragmentShader )
+{
+    unsigned int program = glCreateProgram();
+    unsigned int vs      = CompileShader(GL_VERTEX_SHADER, vertexShader);
+    unsigned int fs;
+    if (vs == 0)
+    {
+        vs = CompileErrorShader(GL_VERTEX_SHADER);
+        fs = CompileErrorShader(GL_FRAGMENT_SHADER);
+    }
+    else
+    {
+        fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+        if (fs == 0)
+            fs = CompileErrorShader(GL_FRAGMENT_SHADER);
+    }
+
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+
+    glLinkProgram(program);
+    glValidateProgram(program);
+
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    return program;
+}
+
 unsigned int Shader::CompileShader( unsigned int type, const std::string& source )
 {
     unsigned int id = glCreateShader(type);
@@ -168,40 +197,17 @@ unsigned int Shader::CompileErrorShader( unsigned type )
     return id;
 }
 
-unsigned int Shader::CreateShader( const std::string& vertexShader, const std::string& fragmentShader )
+unsigned int Shader::RecompileShader()
 {
-    unsigned int program = glCreateProgram();
-    unsigned int vs      = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs;
-    if (vs == 0)
-    {
-        vs = CompileErrorShader(GL_VERTEX_SHADER);
-        fs = CompileErrorShader(GL_FRAGMENT_SHADER);
-    }
-    else
-    {
-        fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-        if (fs == 0)
-            fs = CompileErrorShader(GL_FRAGMENT_SHADER);
-    }
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
+    ShaderProgramSources source = ParseShader(m_filePath);
+    *m_shaderID                 = CreateShader(source.VertexSource, source.FragmentSource);
+    return *m_shaderID;
 }
 
 void Shader::Use() const
 {
-    glUseProgram(*m_ShaderID);
+    glUseProgram(*m_shaderID);
 }
-
 
 /* --------------------------------------------------------------- */
 // Uniforms
@@ -237,13 +243,16 @@ void Shader::SetSampler2D( const std::string& name, GLint textureSlot )
 
 int Shader::GetUniformLocation( const std::string& name )
 {
-    if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
-        return m_UniformLocationCache[name];
+    if (m_uniformLocationCache.find(name) != m_uniformLocationCache.end())
+        return m_uniformLocationCache[name];
 
-    int location = glGetUniformLocation(*m_ShaderID, name.c_str());
+    int location = glGetUniformLocation(*m_shaderID, name.c_str());
     if (location == -1)
+    {
         std::cout << "Warning: uniform '" << name << "' doesn't exist" << std::endl;
+        std::cout << "Shader: " << m_filePath << std::endl;
+    }
 
-    m_UniformLocationCache[name] = location;
+    m_uniformLocationCache[name] = location;
     return location;
 }

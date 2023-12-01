@@ -1,16 +1,17 @@
 #include <iostream>
 #include <stdexcept>
+#include <functional>
 #include "Window.h"
 
+
 Window::Window( int windowWidth, int windowHeight, const char* windowTitle, GLFWmonitor* windowMonitor,
-                GLFWwindow* windowShare ) : m_width(windowWidth), m_height(windowHeight), m_title(windowTitle), m_monitor(windowMonitor), m_share(windowShare)
+                GLFWwindow* windowShare ) : m_width(windowWidth), m_height(windowHeight), m_title(windowTitle),
+                                            m_monitor(windowMonitor), m_share(windowShare)
 {
     InitializeGLFW();
-    CreateWindow(m_width, m_height, m_title, m_monitor, m_share);
+    CreateOpenGLWindow(m_width, m_height, m_title, m_monitor, m_share);
     InitializeGLAD();
     SetupCallbacks();
-    
-    
 }
 
 Window::~Window()
@@ -35,6 +36,11 @@ int Window::GetWindowWidth() const
 int Window::GetWindowHeight() const
 {
     return m_height;
+}
+
+float Window::GetWindowAspectRatio() const
+{
+    return static_cast<float>(m_width) / static_cast<float>(m_height);
 }
 
 const char* Window::GetWindowTitle() const
@@ -72,13 +78,27 @@ void Window::FrameBufferSizeCallBack( GLFWwindow* window, int newWidth, int newH
     Window* win = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
     if (win)
     {
-        win->m_width = newWidth;
+        win->m_width  = newWidth;
         win->m_height = newHeight;
     }
 }
 
+// void Window::KeyCallback( GLFWwindow* window, int key, int scancode, int action, int mods )
+// {
+//     // Close window
+//     if (key == GLFW_KEY_R && action == GLFW_PRESS)
+//     {
+//         Renderer* renderer = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
+//         if (renderer)
+//         {
+//             renderer->RecompileShader();
+//         }
+//     }
+// }
+
 void Window::ProcessInput() const
 {
+    // Close window
     if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(m_window, true);
@@ -99,10 +119,9 @@ void Window::InitializeGLFW()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        
 }
 
-void Window::CreateWindow( int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share )
+void Window::CreateOpenGLWindow( int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share )
 {
     m_window = glfwCreateWindow(width, height, title, monitor, share);
     if (!m_window)
@@ -127,5 +146,3 @@ void Window::SetupCallbacks()
 {
     glfwSetFramebufferSizeCallback(m_window, Window::FrameBufferSizeCallBack);
 }
-
-

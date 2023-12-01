@@ -89,7 +89,16 @@ void Mesh::Draw()
 {
     m_renderContext.shader->Use();
     m_vao.Bind();
-    m_renderContext.shader->SetFloat4x4("M", false, glm::value_ptr(m_modelMatrix));
+    m_renderContext.shader->SetFloat4x4("Matrix_M", false, glm::value_ptr(m_modelMatrix));
     m_renderContext.camera->UpdateMatrix(*m_renderContext.shader);
+    glDrawElements(m_renderContext.mode, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
+}
+
+void Mesh::DrawUI()
+{
+    m_renderContext.shader->Use();
+    m_vao.Bind();
+    m_renderContext.shader->SetFloat4x4("Matrix_M", false, glm::value_ptr(m_modelMatrix));
+    m_renderContext.camera->UpdateUIMatrix(*m_renderContext.shader);
     glDrawElements(m_renderContext.mode, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
 }

@@ -1055,12 +1055,14 @@
         <Content Include="Libraries\include\glm\CMakeLists.txt"/>
         <Content Include="Libraries\lib\assimp-vc143-mtd.lib"/>
         <Content Include="Libraries\lib\glfw3.lib"/>
+        <Content Include="Resources\Models\Gizmo.fbx"/>
         <Content Include="Resources\Models\Monkey.fbx"/>
         <Content Include="Resources\Models\TwoMonkeys.fbx"/>
         <Content Include="Resources\Textures\Face.png"/>
         <Content Include="Resources\Textures\Icon.png"/>
         <Content Include="Source\Shader\ShaderLibrary\Common.glsl"/>
         <Content Include="Source\Shader\Shaders\DefaultShader.glsl"/>
+        <Content Include="Source\Shader\Shaders\Gizmo.glsl"/>
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">

@@ -33,9 +33,11 @@ public:
     void SetScale( const glm::vec3& scale );
     glm::mat4 GetModelMatrix() const;
     void SetModelMatrix( const glm::mat4& modelMatrix );
+    size_t GetVertexCount() const { return m_indices.size(); }
 
     void SetRenderContext( GLenum mode, Shader& shader, Camera& camera );
     void Draw();
+    void DrawUI();
 
 private:
     glm::vec3 m_position;

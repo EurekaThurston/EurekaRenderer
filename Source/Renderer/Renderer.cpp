@@ -3,8 +3,10 @@
 
 Renderer::Renderer( Window* window )
 {
-    m_window    = window;
-    m_DepthTest = true;
+    m_window             = window;
+    m_depthTest          = true;
+    m_enterRenderLoop    = true;
+    m_canRecompileShader = true;
     // Setup context
     SetupContext();
 }
@@ -48,7 +50,7 @@ void Renderer::EnableDepthTest( bool enable ) const
 void Renderer::Clear( GLfloat r, GLfloat g, GLfloat b, GLfloat a ) const
 {
     glClearColor(r, g, b, a);
-    if (m_DepthTest)
+    if (m_depthTest)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
@@ -70,7 +72,7 @@ void Renderer::SetupRendererContext() const
 }
 
 
-void Renderer::UpdateRendererContext() const
+void Renderer::UpdateRendererContext()
 {
     // Upate delta time
     RendererContext::GetInstance().currentFrameTime = glfwGetTime();
@@ -80,7 +82,7 @@ void Renderer::UpdateRendererContext() const
 
     // Get frame rate
     RendererContext::GetInstance().fps = static_cast<unsigned int>(1.0f / RendererContext::GetInstance().deltaTime);
-    std::cout << "FPS:" << RendererContext::GetInstance().fps << std::endl;
+    // std::cout << "FPS:" << RendererContext::GetInstance().fps << std::endl;
 }
 
 

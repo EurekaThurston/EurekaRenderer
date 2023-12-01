@@ -21,6 +21,12 @@ public:
     Renderer( Window* window );
     ~Renderer();
 
+    enum class MeshTag
+    {
+        Object,
+        UI
+    };
+
     // Renderer
     void SetupContext();
     void Render();
@@ -40,14 +46,15 @@ public:
     // Mesh
     Mesh* GetMesh( const std::string& meshName );
     void SetMeshName( const std::string& meshName, const std::string& newName );
-    void CreateMesh( const std::string& meshName, std::vector<VertexAttributes>& vertices,
+    void CreateMesh( const std::string& meshName, MeshTag tag, std::vector<VertexAttributes>& vertices,
                      std::vector<GLuint>& indices );
-    void CreateMeshFromModel( Model& model );
+    void CreateMeshFromModel( Model& model, MeshTag tag );
     void SetMeshRenderContext( const std::string& meshName, GLenum mode, Shader& shader, Camera& camera );
 
     // Shader
     Shader* GetShader( const std::string& shaderName );
     void CreateShader( const std::string& shaderName, const std::string& filePath );
+    void RecompileShader();
 
     // Texture
     Texture* GetTexture( const std::string& textureName );
@@ -56,6 +63,10 @@ public:
     // Light
     DirectionalLight* GetDirectionalLight( const std::string& lightName ) const;
     void CreateDirectionalLight( const std::string& lightName, glm::vec3 position, glm::vec3 color, float intensity );
+
+    // UI
+    Mesh* GetUI( const std::string& UIName );
+    void SetUIRenderContext( const std::string& UIName, GLenum mode, Shader& shader, Camera& camera );
 
     // Misc
     void GetMaxVertexAttributesSupported() const;
@@ -75,22 +86,28 @@ private:
 
     // Shaders
     std::unordered_map<std::string, Shader*> m_shaders;
+    bool m_canRecompileShader = true;
 
     // Textures
     std::unordered_map<std::string, Texture*> m_textures;
+
+    // UI
+    std::unordered_map<std::string, Mesh*> m_UI;
 
     // Directional Light
     DirectionalLight* m_directionalLight;
 
     // Render Context
-    bool m_DepthTest;
+    bool m_depthTest;
 
     // Context
+    bool m_enterRenderLoop;
     void SetupRendererContext() const;
-    void UpdateRendererContext() const;
+    void UpdateRendererContext();
 
     // Render commands
     void Clear( GLfloat r = 0.5f, GLfloat g = 0.5f, GLfloat b = 0.5f, GLfloat a = 0.5f ) const;
     void Draw( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices ) const;
     void DrawMeshes();
+    void DrawUIs();
 };

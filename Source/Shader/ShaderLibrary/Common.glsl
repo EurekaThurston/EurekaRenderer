@@ -7,12 +7,20 @@ struct DirectionalLight
     float Intensity;
 };
 
+struct Camera
+{
+    vec4 Position;
+    float FrameSizeX;
+    float FrameSizeY;
+};
+
 
 /* -------------------------------------------------------------------------- */
 // Uniforms
-uniform mat4 M;
-uniform mat4 V;
-uniform mat4 P;
+uniform mat4 Matrix_M;
+uniform mat4 Matrix_V;
+uniform mat4 Matrix_P;
+uniform Camera camera;
 uniform DirectionalLight dirLight;
 
 /* -------------------------------------------------------------------------- */
@@ -59,25 +67,33 @@ vec4 saturate(vec4 x) {
 
 vec4 TransformObjectToClip(vec4 vertex)
 {
-    return P * V * M * vertex;
+    return Matrix_P * Matrix_V * Matrix_M * vertex;
 }
 
 vec4 TransformObjectToWorld(vec4 vertex)
 {
-    return M * vertex;
+    return Matrix_M * vertex;
 }
 
 vec4 TransformObjectToWorld(vec3 vertex)
 {
-    return P * V * vec4(vertex, 1.0);
+    return Matrix_M * vec4(vertex, 1.0);
 }
 
 vec3 TransformObjectToWorldNormal(vec3 normal) {
-    return (transpose(inverse(M)) * vec4(normal, 0.0)).xyz;
+    return (transpose(inverse(Matrix_M)) * vec4(normal, 0.0)).xyz;
 }
 
+/* -------------------------------------------------------------------------- */
 // Light functions
 vec3 DirectionalLightDirection()
 {
-    return -dirLight.Direction;
+    return normalize(dirLight.Direction);
+}
+
+/* -------------------------------------------------------------------------- */
+// Camera functions
+vec3 CameraDirection(vec3 vertex)
+{
+    return normalize(camera.Position.xyz - vertex);
 }

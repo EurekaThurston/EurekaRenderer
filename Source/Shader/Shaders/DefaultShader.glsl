@@ -40,7 +40,8 @@ in VertexOutput
 void main()
 {
     vec3 nDirWS = normalize(i.nDirWS);
-    float NdotL = saturate(dot(nDirWS, DirectionalLightDirection()));
+    vec3 lDirWS = DirectionalLightDirection();
+    float NdotL = saturate(dot(nDirWS, lDirWS));
     NdotL = NdotL * 0.5 + 0.5;
     FragColor = NdotL * dirLight.Color * dirLight.Intensity;
 }

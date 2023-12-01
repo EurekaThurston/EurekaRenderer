@@ -16,6 +16,7 @@ glm::vec4 DirectionalLight::GetPosition() const
 
 void DirectionalLight::SetShaderDirectionalLight( Shader& shader ) const
 {
+    shader.Use();
     shader.SetFloat3("dirLight.Direction", GetPosition().x, GetPosition().y, GetPosition().z);
     shader.SetFloat4("dirLight.Color", GetColor().x, GetColor().y, GetColor().z, 1.0f);
     shader.SetFloat("dirLight.Intensity", GetIntensity());

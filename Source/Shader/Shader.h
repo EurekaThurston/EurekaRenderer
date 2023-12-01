@@ -17,8 +17,9 @@ public:
     ~Shader();
 
     void Use() const;
-    unsigned int GetShaderID() const { return *m_ShaderID; }
-    std::string GetFilePath() const { return m_FilePath; }
+    unsigned int GetShaderID() const { return *m_shaderID; }
+    std::string GetFilePath() const { return m_filePath; }
+    unsigned int RecompileShader();
 
     // Uniforms
     void SetFloat( const std::string& name, float value );
@@ -29,18 +30,18 @@ public:
     void SetSampler2D( const std::string& name, GLint textureSlot );
 
 private:
-    std::string m_FilePath;
+    std::string m_filePath;
     // unsigned int m_ShaderID;
-    std::unique_ptr<GLuint, void(*)( GLuint* )> m_ShaderID;
-    std::unordered_map<std::string, int> m_UniformLocationCache;
+    std::unique_ptr<GLuint, void(*)( GLuint* )> m_shaderID;
+    std::unordered_map<std::string, int> m_uniformLocationCache;
 
     ShaderProgramSources ParseShader( const std::string& filepath );
     std::string ReadIncludeFile( const std::string& filepath );
     std::string ExtractIncludePath( const std::string& line );
-    unsigned int CompileShader( unsigned int type, const std::string& source );
     unsigned int CreateShader( const std::string& vertexShader, const std::string& fragmentShader );
-    int GetUniformLocation( const std::string& name );
+    unsigned int CompileShader( unsigned int type, const std::string& source );
     unsigned int CompileErrorShader( unsigned int type );
+    int GetUniformLocation( const std::string& name );
 
     // Error shader
     const char* m_errorVertexShaderSource = R"glsl(

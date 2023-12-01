@@ -11,28 +11,34 @@ void Renderer::SetupContext()
     // ImportTexture("Face", "Resources/Textures/Face.png");
 
     // Model    
-    ImportModel("Monkey", "Resources/Models/TwoMonkeys.fbx");
+    ImportModel("Monkey", "Resources/Models/Monkey.fbx");
+    ImportModel("Gizmo", "Resources/Models/Gizmo.fbx");
     /* -------------------------------------------------------------------------- */
 
     // Shader
     CreateShader("DefaultShader", "Source/Shader/Shaders/DefaultShader.glsl");
-    GetShader("DefaultShader")->Use();
-    // GetShader("DefaultShader")->SetSampler2D("Icon", 0);
-    // GetShader("DefaultShader")->SetSampler2D("Face", 1);
+    CreateShader("GizmoShader", "Source/Shader/Shaders/Gizmo.glsl");
 
     // Camera
     CreateCamera("MainCamera", m_window, glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f),
                  glm::vec3(0.0f, 1.0f, 0.0), 45.0f, 0.1f, 100.0f);
 
-    CreateMeshFromModel(*GetModel("Monkey"));
+    // Mesh objects
+    CreateMeshFromModel(*GetModel("Monkey"), MeshTag::Object);
     SetMeshRenderContext("Suzanne", GL_TRIANGLES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
-    SetMeshRenderContext("Suzanne.001", GL_TRIANGLES, *GetShader("DefaultShader"), *GetCamera("MainCamera"));
 
-    GetMesh("Suzanne")->SetScale(glm::vec3(0.01f));
-    GetMesh("Suzanne.001")->SetScale(glm::vec3(0.01f));
+    // UI
+    CreateMeshFromModel(*GetModel("Gizmo"), MeshTag::UI);
+    SetUIRenderContext("Gizmo", GL_TRIANGLES, *GetShader("GizmoShader"), *GetCamera("MainCamera"));
+    // GetUI("Gizmo")->SetPosition(glm::vec3(
+    //     1.0f / static_cast<float>(m_window->GetWindowWidth()) * 100.0f * m_window->GetWindowAspectRatio(),
+    //     1.0f / static_cast<float>(m_window->GetWindowHeight()) * 100.0f,
+    //     -1.0f));
+    GetUI("Gizmo")->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
 
     // Light
-    CreateDirectionalLight("Sun", glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, 1.0f, 1.0f), 0.5f);
+    CreateDirectionalLight("Sun", glm::vec3(1.0f, 1.0f, 1.0f),
+                           glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
     GetDirectionalLight("Sun")->SetShaderDirectionalLight(*GetShader("DefaultShader"));
 
     // Setup renderer context
@@ -42,6 +48,14 @@ void Renderer::SetupContext()
 
 void Renderer::Render()
 {
+    if (m_enterRenderLoop)
+    {
+        DividingStar();
+        std::cout << "Render Loop: " << std::endl;
+    }
+
+    RecompileShader();
+
     // Clear the screen
     Clear(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -53,11 +67,23 @@ void Renderer::Render()
 
     // Camera receives input
     GetCamera("MainCamera")->UpdateInput();
-    GetCamera("MainCamera")->UpdateMatrix(*GetShader("DefaultShader"));
 
     // Draw call
+    // Mesh objects
+    EnableDepthTest(true);
     DrawMeshes();
+
+    // UI
+    EnableDepthTest(false);
+    DrawUIs();
 
     // Swap the buffers
     glfwSwapBuffers(m_window->GetWindow());
+
+    if (m_enterRenderLoop)
+    {
+        std::cout << "End of Render Loop" << std::endl;
+        DividingStar();
+        m_enterRenderLoop = false;
+    }
 }

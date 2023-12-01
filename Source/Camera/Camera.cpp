@@ -19,7 +19,7 @@ Camera::Camera( const std::string name, Window* window, glm::vec3 position, glm:
     m_farPlane          = farPlane;
 }
 
-void Camera::UpdateMatrix( Shader& shader )
+void Camera::UpdateMatrix( Shader& shader ) const
 {
     // Makes camera look in the right direction from the right position
     glm::mat4 view = glm::lookAt(m_position, m_position + m_orientation, m_up);
@@ -27,10 +27,39 @@ void Camera::UpdateMatrix( Shader& shader )
     glm::mat4 projection = glm::perspective(glm::radians(m_fov),
                                             static_cast<float>(m_window->GetWindowWidth()) / static_cast<float>(m_window
                                                 ->GetWindowHeight()), m_nearPlane, m_farPlane);
-
     // Exports the camera matrix to the Vertex Shader
-    shader.SetFloat4x4("V", GL_FALSE, glm::value_ptr(view));
-    shader.SetFloat4x4("P", GL_FALSE, glm::value_ptr(projection));
+    shader.Use();
+    shader.SetFloat4x4("Matrix_V", GL_FALSE, glm::value_ptr(view));
+    shader.SetFloat4x4("Matrix_P", GL_FALSE, glm::value_ptr(projection));
+    shader.SetFloat4("camera.Position", m_position.x, m_position.y, m_position.z, 1.0f);
+    shader.SetFloat("camera.FrameSizeX", static_cast<float>(m_window->GetWindowWidth()));
+    shader.SetFloat("camera.FrameSizeY", static_cast<float>(m_window->GetWindowHeight()));
+}
+
+void Camera::UpdateUIMatrix( Shader& shader ) const
+{
+    // Makes camera look in the right direction from the right position
+    glm::mat4 view = glm::lookAt(m_position, m_position + m_orientation, m_up);
+    view           = glm::mat4(glm::mat3(view));
+
+    // UI position
+    float aspectRatio = static_cast<float>(m_window->GetWindowWidth()) / static_cast<float>(m_window->
+        GetWindowHeight());
+    float uiPosX          = -aspectRatio + 0.175f;
+    float uiPosY          = -0.825f;
+    glm::mat4 uiPosition  = glm::translate(glm::mat4(1.0f), glm::vec3(uiPosX, uiPosY, 0.0f));
+    glm::mat4 uiScale     = glm::scale(glm::mat4(1.0f), glm::vec3(1.5f, 1.5f, 1.5f));
+    glm::mat4 uiTransform = uiPosition * view * uiScale;
+
+    // Projection
+    glm::mat4 projection = glm::ortho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 100.0f);
+    // Exports the camera matrix to the Vertex Shader
+    shader.Use();
+    shader.SetFloat4x4("Matrix_V", GL_FALSE, glm::value_ptr(uiTransform));
+    shader.SetFloat4x4("Matrix_P", GL_FALSE, glm::value_ptr(projection));
+    shader.SetFloat4("camera.Position", m_position.x, m_position.y, m_position.z, 1.0f);
+    shader.SetFloat("camera.FrameSizeX", static_cast<float>(m_window->GetWindowWidth()));
+    shader.SetFloat("camera.FrameSizeY", static_cast<float>(m_window->GetWindowHeight()));
 }
 
 void Camera::UpdateInput()
@@ -41,7 +70,6 @@ void Camera::UpdateInput()
 
 void Camera::Movement()
 {
-    glm::vec3 moveDir  = glm::vec3(0.0f);
     GLFWwindow* window = m_window->GetWindow();
 
     // Handles key inputs
@@ -117,7 +145,7 @@ void Camera::Rotation()
                                                glm::normalize(glm::cross(m_orientation, m_up)));
 
         // Decides whether or not the next vertical Orientation is legal or not
-        if (abs(glm::angle(newOrientation, m_up) - glm::radians(90.0f)) <= glm::radians(85.0f))
+        if (abs(glm::angle(newOrientation, m_up) - glm::radians(90.0f)) <= glm::radians(90.0f))
         {
             m_targetOrientation = newOrientation;
         }
@@ -130,7 +158,7 @@ void Camera::Rotation()
         // Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
         glfwSetCursorPos(window, static_cast<float>(m_width) / 2.0f, static_cast<float>(m_height) / 2.0f);
     }
-    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE)
     {
         // Unhides cursor since camera is not looking around anymore
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

@@ -1,7 +1,7 @@
 # Eureka Renderer
 
 > ## Version 0.1 ( 11/22/2023 - 12/2/2023 )
-> [**<ins>Program Structure on LucidChart</ins>**](https://lucid.app/lucidchart/2efba941-fefb-42e8-b17b-c8bb65f38530/edit?invitationId=inv_a0385ab1-d2db-4790-9811-766200246513) 
+> [**<ins>Program Structure on LucidChart</ins>**](https://lucid.app/lucidchart/2efba941-fefb-42e8-b17b-c8bb65f38530/edit?viewport_loc=651%2C-1154%2C5124%2C2438%2CHWEp-vi-RSFO&invitationId=inv_a0385ab1-d2db-4790-9811-766200246513) 
 > 
 > ![Version 0.1 Overview](ReadmeFiles%2FV0_1_Overview.png)
 > - **Current features:**

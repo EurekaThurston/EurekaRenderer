@@ -1,7 +1,6 @@
 #include"Camera.h"
 #include <iostream>
 
-
 Camera::Camera( const std::string name, Window* window, glm::vec3 position, glm::vec3 orientation, glm::vec3 up,
                 float FOVdeg, float nearPlane, float farPlane )
 {

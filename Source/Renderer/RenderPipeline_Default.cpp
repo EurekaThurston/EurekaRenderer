@@ -30,20 +30,14 @@ void Renderer::SetupContext()
     // UI
     CreateMeshFromModel(*GetModel("Gizmo"), MeshTag::UI);
     SetUIRenderContext("Gizmo", GL_TRIANGLES, *GetShader("GizmoShader"), *GetCamera("MainCamera"));
-    // GetUI("Gizmo")->SetPosition(glm::vec3(
-    //     1.0f / static_cast<float>(m_window->GetWindowWidth()) * 100.0f * m_window->GetWindowAspectRatio(),
-    //     1.0f / static_cast<float>(m_window->GetWindowHeight()) * 100.0f,
-    //     -1.0f));
-    GetUI("Gizmo")->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
 
     // Light
-    CreateDirectionalLight("Sun", glm::vec3(1.0f, 1.0f, 1.0f),
-                           glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-    GetDirectionalLight("Sun")->SetShaderDirectionalLight(*GetShader("DefaultShader"));
+    CreateDirectionalLight(glm::vec3(1.0f, 1.0f, 1.0f),
+                           glm::vec3(0.25f, 0.75f, 0.5f), 1.0f);
+    SetDirectionalLightContext();
 
     // Setup renderer context
     SetupRendererContext();
-    EnableDepthTest(true);
 }
 
 void Renderer::Render()
@@ -63,18 +57,16 @@ void Renderer::Render()
     UpdateRendererContext();
 
     // Update directional light
-    GetDirectionalLight("Sun")->SetShaderDirectionalLight(*GetShader("DefaultShader"));
+    SetDirectionalLightContext();
 
     // Camera receives input
     GetCamera("MainCamera")->UpdateInput();
 
     // Draw call
     // Mesh objects
-    EnableDepthTest(true);
     DrawMeshes();
 
     // UI
-    // EnableDepthTest(false);
     DrawUIs();
 
     // Swap the buffers

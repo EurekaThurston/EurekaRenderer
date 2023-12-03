@@ -62,7 +62,8 @@ public:
 
     // Light
     DirectionalLight* GetDirectionalLight( const std::string& lightName ) const;
-    void CreateDirectionalLight( const std::string& lightName, glm::vec3 position, glm::vec3 color, float intensity );
+    void CreateDirectionalLight( glm::vec3 position, glm::vec3 color, float intensity );
+    void SetDirectionalLightContext() const;
 
     // UI
     Mesh* GetUI( const std::string& UIName );
@@ -92,7 +93,7 @@ private:
     std::unordered_map<std::string, Texture*> m_textures;
 
     // UI
-    std::unordered_map<std::string, Mesh*> m_UI;
+    std::unordered_map<std::string, Mesh*> m_UIs;
 
     // Directional Light
     DirectionalLight* m_directionalLight;

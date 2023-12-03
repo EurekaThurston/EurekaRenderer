@@ -8,8 +8,7 @@ int main()
     {
         Window window(1920, 1080, "Eureka Renderer", NULL, NULL);
         Renderer renderer(&window);
-        // glfwSetWindowUserPointer(window.GetWindow(), &renderer);
-        // glfwSetKeyCallback(window.GetWindow(), Window::KeyCallback);
+        renderer.SetupContext();
 
         // Render loop
         while (!window.WindowShouldClose())

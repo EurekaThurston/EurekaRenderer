@@ -15,14 +15,14 @@ Mesh* Renderer::GetMesh( const std::string& meshName )
 
 Mesh* Renderer::GetUI( const std::string& UIName )
 {
-    if (m_UI.find(UIName) == m_UI.end())
+    if (m_UIs.find(UIName) == m_UIs.end())
     {
         DividingLine();
         std::cout << "UI not found: " << UIName << std::endl;
         DividingLine();
         return nullptr;
     }
-    return m_UI[UIName];
+    return m_UIs[UIName];
 }
 
 void Renderer::SetMeshName( const std::string& meshName, const std::string& newName )
@@ -50,7 +50,7 @@ void Renderer::CreateMesh( const std::string& meshName, MeshTag tag, std::vector
     }
     else if (tag == MeshTag::UI)
     {
-        m_UI[meshName] = new Mesh(meshName, vertices, indices);
+        m_UIs[meshName] = new Mesh(meshName, vertices, indices);
     }
     else
     {
@@ -94,7 +94,7 @@ void Renderer::SetMeshRenderContext( const std::string& meshName, GLenum mode, S
 
 void Renderer::SetUIRenderContext( const std::string& UIName, GLenum mode, Shader& shader, Camera& camera )
 {
-    m_UI[UIName]->SetRenderContext(mode, shader, camera);
+    m_UIs[UIName]->SetRenderContext(mode, shader, camera);
     DividingLine();
     std::cout << "UI render context set: " << UIName << std::endl;
     std::cout << "Mode: " << mode << std::endl;
@@ -105,6 +105,7 @@ void Renderer::SetUIRenderContext( const std::string& UIName, GLenum mode, Shade
 
 void Renderer::DrawMeshes()
 {
+    EnableDepthTest(true);
     for (auto& meshEntry : m_meshes)
     {
         Mesh* mesh = meshEntry.second;
@@ -128,7 +129,8 @@ void Renderer::DrawMeshes()
 
 void Renderer::DrawUIs()
 {
-    for (auto& uiEntry : m_UI)
+    EnableDepthTest(true);
+    for (auto& uiEntry : m_UIs)
     {
         Mesh* uiMesh = uiEntry.second;
         if (uiMesh)

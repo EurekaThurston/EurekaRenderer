@@ -41,8 +41,26 @@ void main()
 {
     vec3 nDirWS = normalize(i.nDirWS);
     vec3 lDirWS = DirectionalLightDirection();
+    vec3 vDirWS = CameraDirection(i.posWS);
+    vec3 hDirWS = normalize(lDirWS + vDirWS);
+
+    // Directional Light
+    float lightIntensity = dirLight.Intensity;
+    vec4 lightColor = dirLight.Color;
+
+    // Diffuse
     float NdotL = saturate(dot(nDirWS, lDirWS));
     NdotL = NdotL * 0.5 + 0.5;
-    FragColor = NdotL * dirLight.Color * dirLight.Intensity;
+    vec4 diffuse = NdotL * lightIntensity * lightColor;
+
+    // Specular
+    float NdotH = saturate(dot(nDirWS, hDirWS));
+    vec4 specular = vec4(pow(NdotH, 64.0));
+
+    vec4 dirLighting = diffuse + specular;
+
+
+
+    FragColor = dirLighting;
 }
 

@@ -7,8 +7,6 @@ Renderer::Renderer( Window* window )
     m_depthTest          = true;
     m_enterRenderLoop    = true;
     m_canRecompileShader = true;
-    // Setup context
-    SetupContext();
 }
 
 Renderer::~Renderer()

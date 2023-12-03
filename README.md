@@ -26,3 +26,6 @@
 >   - More render pipeline
 >   - GUI
 >   - TBD
+> - **Known Bugs**
+>   - The program only runs in debug config, run/debug in release config will raise millions of errors
+>   - The built .exe using debug config cannot run either since the program currently cannot handle minimized window
